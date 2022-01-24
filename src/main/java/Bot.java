@@ -1,32 +1,13 @@
-
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import lombok.SneakyThrows;
-import org.checkerframework.checker.units.UnitsTools;
-import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.List;
-import java.util.logging.Level;
-
-import static org.checkerframework.checker.units.UnitsTools.A;
 
 public class Bot extends TelegramLongPollingBot {
     protected Bot(DefaultBotOptions options) {
@@ -60,7 +41,8 @@ public class Bot extends TelegramLongPollingBot {
         String[] location = callbackQuery.getData().split(":");
         String floor = location[0];
         String room = location[1];
-
+        Integer FourthSend = -1;
+        Integer FifthSend = -1;
         switch (floor){
             case "1Floor":
             switch (room)
@@ -75,62 +57,63 @@ public class Bot extends TelegramLongPollingBot {
                     execute(SendPhoto.builder().photo(fotoContainer.get("Hall")).caption(PropUtil.getProperty("HallDescription")).chatId(message.getChatId().toString()).build());
                     execute(SendPhoto.builder().photo(fotoContainer.get("Administration")).chatId(message.getChatId().toString()).build());
                 break;
-            }
+            } break;
             case "2Floor":
                 switch (room)
                 {case "Кухня":
-                    execute(SendPhoto.builder().photo(fotoContainer.get("shower")).caption(PropUtil.getProperty("ShowerDescription")).chatId(message.getChatId().toString()).build());
+                    execute(SendPhoto.builder().photo(fotoContainer.get("fk")).caption(PropUtil.getProperty("SecondKitchenDescription")).chatId(message.getChatId().toString()).build());
                     break;
-                    case "Умывальники":execute(SendPhoto.builder().photo(fotoContainer.get("Tennis")).caption(PropUtil.getProperty("TennisDescription")).chatId(message.getChatId().toString()).build());
+                    case "Умывальники":execute(SendPhoto.builder().photo(fotoContainer.get("fb")).caption(PropUtil.getProperty("SecondWashRoomDescription")).chatId(message.getChatId().toString()).build());
                         break;
-                    case "Коридор_право":execute(SendPhoto.builder().photo(fotoContainer.get("Duty")).caption(PropUtil.getProperty("DutyDescription")).chatId(message.getChatId().toString()).build());
+                    case "Коридор_право":execute(SendPhoto.builder().photo(fotoContainer.get("frc")).caption(PropUtil.getProperty("SecondLeftCorridor")).chatId(message.getChatId().toString()).build());
                         break;
                     case "Коридор_лево":
-                        execute(SendPhoto.builder().photo(fotoContainer.get("Hall")).caption(PropUtil.getProperty("HallDescription")).chatId(message.getChatId().toString()).build());
-                        execute(SendPhoto.builder().photo(fotoContainer.get("Administration")).chatId(message.getChatId().toString()).build());
+                        execute(SendPhoto.builder().photo(fotoContainer.get("lrc")).caption(PropUtil.getProperty("SecondRightCorridor")).chatId(message.getChatId().toString()).build());
                         break;
-                }
+                } break;
             case "3Floor":
                 switch (room)
             {case "Кухня":
-                execute(SendPhoto.builder().photo(fotoContainer.get("shower")).caption(PropUtil.getProperty("ShowerDescription")).chatId(message.getChatId().toString()).build());
+                execute(SendPhoto.builder().photo(fotoContainer.get("sk")).caption(PropUtil.getProperty("ThirdKitchenDescription")).chatId(message.getChatId().toString()).build());
                 break;
-                case "Умывальники":execute(SendPhoto.builder().photo(fotoContainer.get("Tennis")).caption(PropUtil.getProperty("TennisDescription")).chatId(message.getChatId().toString()).build());
+                case "Умывальники":execute(SendPhoto.builder().photo(fotoContainer.get("sb")).caption(PropUtil.getProperty("ThirdWashRoomDescription")).chatId(message.getChatId().toString()).build());
                     break;
-                case "Коридор_право":execute(SendPhoto.builder().photo(fotoContainer.get("Duty")).caption(PropUtil.getProperty("DutyDescription")).chatId(message.getChatId().toString()).build());
+                case "Коридор_право":execute(SendPhoto.builder().photo(fotoContainer.get("src")).caption(PropUtil.getProperty("ThirdLeftCorridor")).chatId(message.getChatId().toString()).build());
                     break;
                 case "Коридор_лево":
-                    execute(SendPhoto.builder().photo(fotoContainer.get("Hall")).caption(PropUtil.getProperty("HallDescription")).chatId(message.getChatId().toString()).build());
-                    execute(SendPhoto.builder().photo(fotoContainer.get("Administration")).chatId(message.getChatId().toString()).build());
+                    execute(SendPhoto.builder().photo(fotoContainer.get("slc")).caption(PropUtil.getProperty("ThirdRightCorridor")).chatId(message.getChatId().toString()).build());
                     break;
-            }
+            } break;
             case "4Floor":
+                if (FourthSend.equals(-1)){
+                    FourthSend = 1;
+                execute(SendMessage.builder().text(PropUtil.getProperty("FourthFloorDescription")).chatId(message.getChatId().toString()).build());}
                 switch (room)
             {case "Кухня":
-                execute(SendPhoto.builder().photo(fotoContainer.get("shower")).caption(PropUtil.getProperty("ShowerDescription")).chatId(message.getChatId().toString()).build());
-                break;
-                case "Умывальники":execute(SendPhoto.builder().photo(fotoContainer.get("Tennis")).caption(PropUtil.getProperty("TennisDescription")).chatId(message.getChatId().toString()).build());
+                    execute(SendPhoto.builder().photo(fotoContainer.get("tk")).caption(PropUtil.getProperty("FourthKitchenDescription")).chatId(message.getChatId().toString()).build());
                     break;
-                case "Коридор_право":execute(SendPhoto.builder().photo(fotoContainer.get("Duty")).caption(PropUtil.getProperty("DutyDescription")).chatId(message.getChatId().toString()).build());
+                case "Умывальники":execute(SendPhoto.builder().photo(fotoContainer.get("tb")).caption(PropUtil.getProperty("FourthWashRoomDescription")).chatId(message.getChatId().toString()).build());
+                    break;
+                case "Коридор_право":execute(SendPhoto.builder().photo(fotoContainer.get("trc")).caption(PropUtil.getProperty("FourthLeftCorridor")).chatId(message.getChatId().toString()).build());
                     break;
                 case "Коридор_лево":
-                    execute(SendPhoto.builder().photo(fotoContainer.get("Hall")).caption(PropUtil.getProperty("HallDescription")).chatId(message.getChatId().toString()).build());
-                    execute(SendPhoto.builder().photo(fotoContainer.get("Administration")).chatId(message.getChatId().toString()).build());
+                    execute(SendPhoto.builder().photo(fotoContainer.get("tlc")).caption(PropUtil.getProperty("FourthRightCorridor")).chatId(message.getChatId().toString()).build());
                     break;
-            }
+            } break;
             case "5Floor":
+                if (FifthSend == -1){
+                    FifthSend++;
+                execute(SendMessage.builder().text(PropUtil.getProperty("FifthFloorDescription")).chatId(message.getChatId().toString()).build());}
                 switch (room)
             {case "Кухня":
-                execute(SendMessage.builder().text("for girls only").chatId(message.getChatId().toString()).build());
-                execute(SendPhoto.builder().photo(fotoContainer.get("shower")).caption(PropUtil.getProperty("ShowerDescription")).chatId(message.getChatId().toString()).build());
+                execute(SendPhoto.builder().photo(fotoContainer.get("lk")).caption(PropUtil.getProperty("FifthKitchenDescription")).chatId(message.getChatId().toString()).build());
                 break;
-                case "Умывальники":execute(SendPhoto.builder().photo(fotoContainer.get("Tennis")).caption(PropUtil.getProperty("TennisDescription")).chatId(message.getChatId().toString()).build());
+                case "Умывальники":execute(SendPhoto.builder().photo(fotoContainer.get("lb")).caption(PropUtil.getProperty("FifthWashRoomDescription")).chatId(message.getChatId().toString()).build());
                     break;
-                case "Коридор_право":execute(SendPhoto.builder().photo(fotoContainer.get("Duty")).caption(PropUtil.getProperty("DutyDescription")).chatId(message.getChatId().toString()).build());
+                case "Коридор_право":execute(SendPhoto.builder().photo(fotoContainer.get("lrc")).caption(PropUtil.getProperty("FifthRightCorridor")).chatId(message.getChatId().toString()).build());
                     break;
                 case "Коридор_лево":
-                    execute(SendPhoto.builder().photo(fotoContainer.get("Hall")).caption(PropUtil.getProperty("HallDescription")).chatId(message.getChatId().toString()).build());
-                    execute(SendPhoto.builder().photo(fotoContainer.get("Administration")).chatId(message.getChatId().toString()).build());
+                    execute(SendPhoto.builder().photo(fotoContainer.get("llc")).caption(PropUtil.getProperty("FifthLeftCorridor")).chatId(message.getChatId().toString()).build());
                     break;
             } break;
         }
@@ -159,7 +142,7 @@ public class Bot extends TelegramLongPollingBot {
                     List<List<InlineKeyboardButton>> fl = new ArrayList<>();
                     for (loc vll: loc.values()){
                         fl.add(Arrays.asList(InlineKeyboardButton.builder().
-                                text(vll.name()).callbackData("Location:"+vll.name()).build()));
+                                text(vll.name()).callbackData("2Floor:"+vll.name()).build()));
                     }
                     execute(SendMessage.builder().text("А куда именно?").
                             chatId(message.getChatId().toString())
@@ -170,7 +153,7 @@ public class Bot extends TelegramLongPollingBot {
                     List<List<InlineKeyboardButton>> fl3 = new ArrayList<>();
                     for (loc vll: loc.values()){
                         fl3.add(Arrays.asList(InlineKeyboardButton.builder().
-                                text(vll.name()).callbackData("Location:"+vll.name()).build()));
+                                text(vll.name()).callbackData("3Floor:"+vll.name()).build()));
                     }
                     execute(SendMessage.builder().text("А куда именно?").
                             chatId(message.getChatId().toString())
@@ -180,7 +163,7 @@ public class Bot extends TelegramLongPollingBot {
                 case "/floor4":  List<List<InlineKeyboardButton>> fl4 = new ArrayList<>();
                     for (loc vll: loc.values()){
                         fl4.add(Arrays.asList(InlineKeyboardButton.builder().
-                                text(vll.name()).callbackData("Location:"+vll.name()).build()));
+                                text(vll.name()).callbackData("4Floor:"+vll.name()).build()));
                     }
                     execute(SendMessage.builder().text("А куда именно?").
                             chatId(message.getChatId().toString())
@@ -190,7 +173,7 @@ public class Bot extends TelegramLongPollingBot {
                 case "/floor5": List<List<InlineKeyboardButton>> fl5 = new ArrayList<>();
                     for (loc vll: loc.values()){
                         fl5.add(Arrays.asList(InlineKeyboardButton.builder().
-                                text(vll.name()).callbackData("Location:"+vll.name()).build()));
+                                text(vll.name()).callbackData("5Floor:"+vll.name()).build()));
                     }
                     execute(SendMessage.builder().text("А куда именно?").
                             chatId(message.getChatId().toString())
