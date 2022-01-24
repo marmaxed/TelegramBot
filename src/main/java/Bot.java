@@ -41,8 +41,6 @@ public class Bot extends TelegramLongPollingBot {
         String[] location = callbackQuery.getData().split(":");
         String floor = location[0];
         String room = location[1];
-        Integer FourthSend = -1;
-        Integer FifthSend = -1;
         switch (floor){
             case "1Floor":
             switch (room)
@@ -85,9 +83,7 @@ public class Bot extends TelegramLongPollingBot {
                     break;
             } break;
             case "4Floor":
-                if (FourthSend.equals(-1)){
-                    FourthSend = 1;
-                execute(SendMessage.builder().text(PropUtil.getProperty("FourthFloorDescription")).chatId(message.getChatId().toString()).build());}
+                execute(SendMessage.builder().text(PropUtil.getProperty("FourthFloorDescription")).chatId(message.getChatId().toString()).build());
                 switch (room)
             {case "Кухня":
                     execute(SendPhoto.builder().photo(fotoContainer.get("tk")).caption(PropUtil.getProperty("FourthKitchenDescription")).chatId(message.getChatId().toString()).build());
@@ -101,9 +97,7 @@ public class Bot extends TelegramLongPollingBot {
                     break;
             } break;
             case "5Floor":
-                if (FifthSend == -1){
-                    FifthSend++;
-                execute(SendMessage.builder().text(PropUtil.getProperty("FifthFloorDescription")).chatId(message.getChatId().toString()).build());}
+                execute(SendMessage.builder().text(PropUtil.getProperty("FifthFloorDescription")).chatId(message.getChatId().toString()).build());
                 switch (room)
             {case "Кухня":
                 execute(SendPhoto.builder().photo(fotoContainer.get("lk")).caption(PropUtil.getProperty("FifthKitchenDescription")).chatId(message.getChatId().toString()).build());
